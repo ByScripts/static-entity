@@ -101,6 +101,6 @@ abstract class StaticEntity implements StaticEntityInterface
 
     public function is($id)
     {
-        return $id === $this->id;
+        return $id === $this->getId();
     }
 }
