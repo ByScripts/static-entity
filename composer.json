@@ -1,0 +1,22 @@
+{
+    "name": "byscripts/static-entity",
+    "description": "Provide some kind of static entities",
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thierry Goettelmann",
+            "email": "thierry@byscripts.info"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Byscripts\\StaticEntity\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Byscripts\\StaticEntity\\Tests\\": "tests/"
+        }
+    }
+}
