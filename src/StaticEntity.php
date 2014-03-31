@@ -6,6 +6,8 @@ abstract class StaticEntity implements StaticEntityInterface
 {
     static private $classes = array();
 
+    protected $id;
+
     static private function initDataSet($class)
     {
         $dataSet = call_user_func(array($class, 'getDataSet'));
@@ -97,6 +99,11 @@ abstract class StaticEntity implements StaticEntityInterface
         }
 
         return self::getInstance($id, $class);
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function is($id)
