@@ -31,13 +31,13 @@ abstract class StaticEntity implements StaticEntityInterface
             }
         }
 
-        static::$classes[$class]['reflection'] = $reflection;
-        static::$classes[$class]['dataSet'] = $dataSet;
+        self::$classes[$class]['reflection'] = $reflection;
+        self::$classes[$class]['dataSet'] = $dataSet;
     }
 
     static private function initClass($class)
     {
-        if (array_key_exists($class, static::$classes)) {
+        if (array_key_exists($class, self::$classes)) {
             return;
         }
 
@@ -45,36 +45,36 @@ abstract class StaticEntity implements StaticEntityInterface
             throw new \Exception('Class must extends StaticEntity');
         }
 
-        static::$classes[$class] = array(
+        self::$classes[$class] = array(
             'instances' => array(),
             'dataSet' => null,
             'reflection' => null
         );
 
-        static::initDataSet($class);
+        self::initDataSet($class);
     }
 
     static private function getInstance($id, $class)
     {
-        static::initClass($class);
+        self::initClass($class);
 
-        if(array_key_exists($id, static::$classes[$class]['instances'])) {
-            return static::$classes[$class]['instances'][$id];
+        if(array_key_exists($id, self::$classes[$class]['instances'])) {
+            return self::$classes[$class]['instances'][$id];
         }
 
-        if (!array_key_exists($id, static::$classes[$class]['dataSet'])) {
-            return static::$classes[$class]['instances'][$id] = null;
+        if (!array_key_exists($id, self::$classes[$class]['dataSet'])) {
+            return self::$classes[$class]['instances'][$id] = null;
         }
 
         $instance = new $class;
 
-        foreach(static::$classes[$class]['dataSet'][$id] as $propertyName => $propertyValue) {
-            $property = static::$classes[$class]['reflection']->getProperty($propertyName);
+        foreach(self::$classes[$class]['dataSet'][$id] as $propertyName => $propertyValue) {
+            $property = self::$classes[$class]['reflection']->getProperty($propertyName);
             $property->setAccessible(true);
             $property->setValue($instance, $propertyValue);
         }
 
-        return static::$classes[$class]['instances'][$id] = $instance;
+        return self::$classes[$class]['instances'][$id] = $instance;
     }
 
     static public function getIds()
@@ -103,7 +103,7 @@ abstract class StaticEntity implements StaticEntityInterface
             $class = get_called_class();
         }
 
-        return static::getInstance($id, $class);
+        return self::getInstance($id, $class);
     }
 
     public function getId()
