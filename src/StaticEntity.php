@@ -82,6 +82,16 @@ abstract class StaticEntity implements StaticEntityInterface
         return array_keys(static::getDataSet());
     }
 
+    static function getAssoc($valueKey = 'name')
+    {
+        return array_map(
+            function($arr) use($valueKey) {
+                return $arr[$valueKey];
+            },
+            static::getDataSet()
+        );
+    }
+
     /**
      * @param mixed       $id
      * @param string|null $class
