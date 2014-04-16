@@ -7,6 +7,13 @@ abstract class StaticEntity implements StaticEntityInterface
     protected $id;
     static private $classes = array();
 
+    private static function checkCalledClass()
+    {
+        if (get_called_class() === __CLASS__) {
+            throw new \Exception('This method cannot be called directly on StaticEntity');
+        }
+    }
+
     /**
      * Check the existence of the ID
      *
@@ -16,7 +23,9 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function exists($id)
     {
-        return array_key_exists($id, self::getDataSet());
+        self::checkCalledClass();
+
+        return array_key_exists($id, static::getDataSet());
     }
 
     /**
@@ -54,6 +63,8 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static function getAssoc($valueKey = 'name')
     {
+        self::checkCalledClass();
+
         return array_map(
             function ($arr) use ($valueKey) {
                 return $arr[ $valueKey ];
@@ -69,6 +80,8 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getIds()
     {
+        self::checkCalledClass();
+
         return array_keys(static::getDataSet());
     }
 
@@ -112,7 +125,7 @@ abstract class StaticEntity implements StaticEntityInterface
             return;
         }
 
-        if (!is_subclass_of($class, 'Byscripts\StaticEntity\StaticEntity')) {
+        if (!is_subclass_of($class, __CLASS__)) {
             throw new \Exception('Class must extends StaticEntity');
         }
 
@@ -168,13 +181,15 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function toId($idOrEntity)
     {
+        self::checkCalledClass();
+
         if ($idOrEntity instanceof StaticEntity) {
             return $idOrEntity->getId();
-        } elseif (self::exists($idOrEntity)) {
+        } elseif (static::exists($idOrEntity)) {
             return $idOrEntity;
         }
 
-        throw new \Exception('StaticEntity::toId() => Invalid parameter');
+        throw new \Exception('StaticEntity::toId() => Invalid parameter: ' . $idOrEntity);
     }
 
     /**
