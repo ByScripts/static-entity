@@ -7,25 +7,20 @@ abstract class StaticEntity implements StaticEntityInterface
     protected $id;
     static private $classes = array();
 
-    private static function checkCalledClass()
-    {
-        if (get_called_class() === __CLASS__) {
-            throw new \Exception('This method cannot be called directly on StaticEntity');
-        }
-    }
-
     /**
      * Check the existence of the ID
      *
      * @param mixed $id The id to be tested
+     * @param null  $class
      *
      * @return bool Whether the ID exists or not
      */
-    static public function exists($id)
+    static public function exists($id, $class = null)
     {
-        self::checkCalledClass();
+        /** @var StaticEntity $class */
+        $class = self::parseClass($class, __FUNCTION__);
 
-        return array_key_exists($id, static::getDataSet());
+        return array_key_exists($id, $class::getDataSet());
     }
 
     /**
@@ -39,50 +34,64 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function get($id, $class = null)
     {
-        if (get_called_class() === get_class()) {
-            if (null === $class) {
-                throw new \Exception('$class cannot be null');
-            } else {
-                if (!class_exists($class)) {
-                    throw new \Exception('Class not exists');
-                }
-            }
-        } else {
-            $class = get_called_class();
-        }
+        $class = self::parseClass($class, __FUNCTION__);
 
         return self::getInstance($id, $class);
     }
 
     /**
-     * Returns an associative array indexed by ID
+     * Returns an array of all instances
      *
-     * @param string $valueKey The key to use to hydrate the values
+     * @param null $class
      *
      * @return array
      */
-    static function getAssoc($valueKey = 'name')
+    static public function getAll($class = null)
     {
-        self::checkCalledClass();
+        $class = static::parseClass($class, __FUNCTION__);
+
+        return array_map(
+            function ($id) use ($class) {
+                return self::get($id, $class);
+            },
+            self::getIds($class)
+        );
+    }
+
+    /**
+     * Returns an associative array indexed by ID
+     *
+     * @param string      $valueKey The key to use to hydrate the values
+     * @param null|string $class
+     *
+     * @return array
+     */
+    static public function getAssoc($valueKey = 'name', $class = null)
+    {
+        /** @var StaticEntity $class */
+        $class = static::parseClass($class, __FUNCTION__);
 
         return array_map(
             function ($arr) use ($valueKey) {
                 return $arr[ $valueKey ];
             },
-            static::getDataSet()
+            $class::getDataSet()
         );
     }
 
     /**
      * Returns an array of all IDs
      *
+     * @param null|string $class
+     *
      * @return array
      */
-    static public function getIds()
+    static public function getIds($class = null)
     {
-        self::checkCalledClass();
+        /** @var StaticEntity $class */
+        $class = self::parseClass($class, __FUNCTION__);
 
-        return array_keys(static::getDataSet());
+        return array_keys($class::getDataSet());
     }
 
     /**
@@ -106,7 +115,9 @@ abstract class StaticEntity implements StaticEntityInterface
         $instance = new $class;
 
         foreach (self::$classes[ $class ]['dataSet'][ $id ] as $propertyName => $propertyValue) {
-            $property = self::$classes[ $class ]['reflection']->getProperty($propertyName);
+            /** @var \ReflectionClass $reflection */
+            $reflection = self::$classes[ $class ]['reflection'];
+            $property = $reflection->getProperty($propertyName);
             $property->setAccessible(true);
             $property->setValue($instance, $propertyValue);
         }
@@ -170,22 +181,40 @@ abstract class StaticEntity implements StaticEntityInterface
         self::$classes[ $class ]['dataSet']    = $dataSet;
     }
 
+    static private function parseClass($class, $method)
+    {
+        $calledClass = get_called_class();
+
+        if (__CLASS__ === $calledClass) {
+            if (null === $class) {
+                throw new \Exception(__CLASS__ . '::' . $method . ' => $class cannot be null');
+            } elseif (!class_exists($class)) {
+                throw new \Exception(__CLASS__ . '::' . $method . ' => Class ' . $class . ' not exists');
+            }
+
+            return $class;
+        } elseif (null !== $class) {
+            throw new \Exception($calledClass . '::' . $method . ' => $class must be null');
+        }
+
+        return $calledClass;
+    }
+
     /**
      * If the parameter is a static entity, returns its id.
      * Else check if the parameter is an existent ID and returns it.
      *
-     * @param $idOrEntity
+     * @param mixed       $idOrEntity
+     * @param null|string $class
      *
      * @throws \Exception
      * @return mixed
      */
-    static public function toId($idOrEntity)
+    static public function toId($idOrEntity, $class = null)
     {
-        self::checkCalledClass();
-
         if ($idOrEntity instanceof StaticEntity) {
             return $idOrEntity->getId();
-        } elseif (static::exists($idOrEntity)) {
+        } elseif (static::exists($idOrEntity, $class)) {
             return $idOrEntity;
         }
 
