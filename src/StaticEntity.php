@@ -193,7 +193,7 @@ abstract class StaticEntity implements StaticEntityInterface
             }
 
             return $class;
-        } elseif (null !== $class) {
+        } elseif (null !== $class && $class !== $calledClass) {
             throw new \Exception($calledClass . '::' . $method . ' => $class must be null');
         }
 
