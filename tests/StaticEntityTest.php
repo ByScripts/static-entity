@@ -53,7 +53,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Class not exists
+     * @expectedExceptionMessage not exists
      */
     public function testNotExists()
     {
@@ -89,7 +89,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Property not exists
+     * @expectedExceptionMessage not exists
      */
     public function testMissingProperty()
     {
