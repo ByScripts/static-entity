@@ -143,9 +143,11 @@ $user->setGender(Gender::MALE);
 
 printf('User: %s %s (%s)', $user->getFirstName(), $user->getLastName(), $user->getGender->getShortName());
 printf('Hello, it seems you are a %s', $user->getGender->getName());
+```
 
-Thanks to toId() method, you can also pass a static instance to the setter:
+Thanks to the `toId()` method, you can also pass a static entity instance to the setter:
 
+```
 $male = Gender::get(Gender::MALE);
 $user->setGender($male);
 ```
