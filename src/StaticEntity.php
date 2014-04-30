@@ -71,6 +71,10 @@ abstract class StaticEntity implements StaticEntityInterface
         /** @var StaticEntity $class */
         $class = static::parseClass($class, __FUNCTION__);
 
+        if (empty($valueKey)) {
+            $valueKey = 'name';
+        }
+
         return array_map(
             function ($arr) use ($valueKey) {
                 return $arr[ $valueKey ];
