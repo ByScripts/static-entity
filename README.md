@@ -6,7 +6,7 @@
 
 ```json
 {
-    require: {
+    "require": {
         "byscripts/static-entity": "~0.1.1"
     }
 }
@@ -58,33 +58,33 @@ class WebBrowser extends StaticEntity
     {
         return [
             self::CHROMIUM => [
-                'name' => 'Chromium',
-                'brand' => 'Google',
-                'engine' => 'Blink',
+                'name'    => 'Chromium',
+                'brand'   => 'Google',
+                'engine'  => 'Blink',
                 'license' => 'BSD'
             ],
             self::FIREFOX => [
-                'name' => 'Firefox',
-                'brand' => 'Mozilla',
-                'engine' => 'Gecko',
+                'name'    => 'Firefox',
+                'brand'   => 'Mozilla',
+                'engine'  => 'Gecko',
                 'license' => 'MPL'
             ],
             self::IE => [
-                'name' => 'Internet Explorer',
-                'brand' => 'Microsoft',
-                'engine' => 'Trident',
+                'name'    => 'Internet Explorer',
+                'brand'   => 'Microsoft',
+                'engine'  => 'Trident',
                 'license' => 'Proprietary'
             ],
             self::OPERA => [
-                'name' => 'Opera',
-                'brand' => 'Opera Software',
-                'engine' => 'Blink',
+                'name'    => 'Opera',
+                'brand'   => 'Opera Software',
+                'engine'  => 'Blink',
                 'license' => 'Proprietary'
             ],
             self::SAFARI => [
-                'name' => 'Safari',
-                'brand' => 'Apple',
-                'engine' => 'WebKit',
+                'name'    => 'Safari',
+                'brand'   => 'Apple',
+                'engine'  => 'WebKit',
                 'license' => 'Proprietary'
             ]
         ];
@@ -119,7 +119,7 @@ WebBrowser::toId(2);        // 2
 WebBrowser::getIds(); // [1, 2, 3, 4, 5]
 
 // The getAssoc() returns an associative array with `id` as key and `name` as value
-WebBrowser::getAssoc(); // [1 => 'Chromium', 2 => 'Firefox', 3 => 'Internet Explorer', ...]
+WebBrowser::getAssoc(); // [1 => 'Chromium', 2 => 'Firefox', ...]
 
 // You can also pass the name of an argument you want to use as value
 WebBrowser::getAssoc('brand'); // [1 => 'Google', 2 => 'Mozilla', 3 => 'Microsoft', ...]
