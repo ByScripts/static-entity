@@ -1,153 +1,129 @@
-# Work in Progress. Not ready for production.
+# Work and documentation in progress. Not ready for production.
 
-## Documentation in progress.
+## Installation
 
-Sometimes, it could be useful to get some king of "static" entities (i.e. object that we don't want to store in database)
+### Add the package in your composer.json
 
-Imagine this kind of model:
-
-```php
-class User
-{
-    private $firstName;
-    private $lastName;
-    private $gender;
-
-    const GENDER_MALE = 1;
-    const GENDER_FEMALE = 2;
-
-    // ... (Getters and setters for firstName and lastName)
-
-    static public function getGenderList()
-    {
-        return [
-            self::GENDER_MALE => ['name' => 'Male', 'shortName' => 'M'],
-            self::GENDER_FEMALE => ['name' => 'Female', 'shortName' => 'F']
-        ];
-    }
-
-    static public function getGenderKeys()
-    {
-        return array_keys(self::getGenderList());
-    }
-
-    public function setGender($gender)
-    {
-        $gender = (int) $gender;
-
-        if(!array_key_exists($gender, self::getGenderList()) {
-            throw new \Exception('Bad value...');
-        }
-
-        $this->gender = $gender;
-    }
-
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    public function getGenderName()
-    {
-        $genders = $this->getGenderList();
-        return $genders[$this->gender]['name'];
-    }
-
-    public function getGenderShortName()
-    {
-        $genders = $this->getGenderList();
-        return $genders[$this->gender]['shortName'];
-    }
+```json
+require: {
+    "byscripts/static-entity": "~0.1.1"
 }
 ```
 
-It could be used like this:
+Then run `composer update` (or `composer update byscripts/static-entity` if you don't want to update all your packages)
+
+### Usage
+
+#### Create your static entity
 
 ```php
-$user = new User();
-$user->setFirstName('John');
-$user->setLastName('Doe');
-$user->setGender(User::GENDER_MALE);
+use Byscripts\StaticEntity\StaticEntity;
 
-printf('User: %s %s (%s)', $user->getFirstName(), $user->getLastName(), $user->getGenderShortName());
-printf('Hello, it seems you are a %s', $user->getGenderName());
-```
-
-As you can see, it generally quickly becomes a nightmare to manage all possibles values, checking, getters etc.
-
-### Here come the Static Entities
-
-#### First step, create your static entity
-
-```php
-class Gender extends StaticEntity
+class WebBrowser extends StaticEntity
 {
-    const MALE = 1;
-    const FEMALE = 2;
-
+    const CHROMIUM = 1;
+    const FIREFOX  = 2;
+    const IE       = 3;
+    const OPERA    = 4;
+    const SAFARI   = 5;
+    
     private $name;
-    private $shortName;
-
-    static public function getDataSet()
-    {
-        return [
-            self::MALE => ['name' => 'Male', 'shortName' => 'M'],
-            self::FEMALE => ['name' => 'Female', 'shortName' => 'F']
-        ];
-    }
-
+    private $brand;
+    private $engine;
+    private $license;
+    
     public function getName()
     {
         return $this->name;
     }
-
-    public function getShortName()
+    
+    public function getBrand()
     {
-        return $this->shortName;
+        return $this->brand;
+    }
+    
+    public function getEngine()
+    {
+        return $this->engine;
+    }
+    
+    public function getLicense()
+    {
+        return $this->license;
+    }
+    
+    static public function getDataSet()
+    {
+        return [
+            self::CHROMIUM => [
+                'name' => 'Chromium',
+                'brand' => 'Google',
+                'engine' => 'Blink',
+                'license' => 'BSD'
+            ],
+            self::FIREFOX => [
+                'name' => 'Firefox',
+                'brand' => 'Mozilla',
+                'engine' => 'Gecko',
+                'license' => 'MPL'
+            ],
+            self::IE => [
+                'name' => 'Internet Explorer',
+                'brand' => 'Microsoft',
+                'engine' => 'Trident',
+                'license' => 'Proprietary'
+            ],
+            self::OPERA => [
+                'name' => 'Opera',
+                'brand' => 'Opera Software',
+                'engine' => 'Blink',
+                'license' => 'Proprietary'
+            ],
+            self::SAFARI => [
+                'name' => 'Safari',
+                'brand' => 'Apple',
+                'engine' => 'WebKit',
+                'license' => 'Proprietary'
+            ]
+        ];
     }
 }
 ```
 
-#### Then update your model
+#### Play with it
 
 ```php
-class User
-{
-    private $firstName;
-    private $lastName;
-    private $gender;
+// Get an instance of WebBrowser, hydrated with Firefox data
+$firefox = WebBrowser::get(WebBrowser::FIREFOX);
 
-    // ... (Getters and setters for firstName and lastName)
+// The getId() method is always available. It returns the key used in the getDataSet() method;
+$firefox->getId();      // 2
 
-    public function setGender($gender)
-    {
-        $this->gender = Gender::toId($gender);
-    }
+// Other methods are ones implemented in the static entity
+$firefox->getName();    // Firefox
 
-    public function getGender()
-    {
-        return Gender::get($this->gender);
-    }
-}
-```
+// The is() method check the argument against the instance ID
+$firefox->is(WebBrowser::CHROMIUM); // false
+$firefox->is(WebBrowser::FIREFOX); // true
 
-Much better, your Model is lightweight again :)
+// The toId() method transform an entity to ID.
+// If an id is passed, it is returned as is. (useful in a Setter method)
+WebBrowser::toId(2);        // 2
+WebBrowser::toId($firefox); // 2
 
-You can now use it like this:
+// The getIds() returns an array of ... well, ids.
+WebBrowser::getIds(); // [1, 2, 3, 4, 5]
 
-```php
-$user = new User();
-$user->setFirstName('John');
-$user->setLastName('Doe');
-$user->setGender(Gender::MALE);
+// The getAssoc() returns an associative array with ID as key, and the name attribute as value
+WebBrowser::getAssoc(); // [1 => 'Chromium', 2 => 'Firefox', 3 => 'Internet Explorer', ...]
 
-printf('User: %s %s (%s)', $user->getFirstName(), $user->getLastName(), $user->getGender->getShortName());
-printf('Hello, it seems you are a %s', $user->getGender->getName());
-```
+// You can also pass the name of an argument you want to use as value
+WebBrowser::getAssoc('brand'); // [1 => 'Google', 2 => 'Mozilla', 3 => 'Microsoft', ...]
 
-Thanks to the `toId()` method, you can also pass a static entity instance to the setter:
+// The getAll() method return an array containing all instances of entities
+WebBrowser::getAll(); [Object, Object, ...]
 
-```php
-$male = Gender::get(Gender::MALE);
-$user->setGender($male);
+// The exists() method check whether the passed ID exists in data set
+WebBrowser::exists(3); // true
+WebBrowser::exists(9); // false
 ```
