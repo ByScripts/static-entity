@@ -12,8 +12,8 @@ class Civility extends StaticEntity
     static public function getDataSet()
     {
         return array(
-            'mr'  => array('name' => 'Monsieur', 'shortName' => 'M.'),
-            'mrs' => array('name' => 'Madame', 'shortName' => 'Mme'),
+            'mr'  => array('name' => 'Mister', 'shortName' => 'Mr'),
+            'mrs' => array('name' => 'Misses', 'shortName' => 'Mrs'),
         );
     }
 

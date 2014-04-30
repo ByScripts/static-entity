@@ -7,17 +7,18 @@ use Byscripts\StaticEntity\Tests\Fixtures\Civility;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidData;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidDataSet;
 use Byscripts\StaticEntity\Tests\Fixtures\MissingProperty;
+use Byscripts\StaticEntity\Tests\Fixtures\NotExtends;
 
-class StaticEntityTest extends \PHPUnit_Framework_TestCase
+class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
         $civility = Civility::get('mr');
 
         $this->assertInstanceOf('Byscripts\StaticEntity\Tests\Fixtures\Civility', $civility);
-        $this->assertEquals('Monsieur', $civility->getName());
+        $this->assertEquals('Mister', $civility->getName());
         $this->assertEquals('mr', $civility->getId());
-        $this->assertEquals('M.', $civility->getShortName());
+        $this->assertEquals('Mr', $civility->getShortName());
     }
 
     public function testNotFound()
@@ -35,38 +36,12 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($civility1, $civility2);
     }
 
-    public function testAlternativeGet()
-    {
-        $civility = StaticEntity::get('mr', 'Byscripts\StaticEntity\Tests\Fixtures\Civility');
-
-        $this->assertInstanceOf('Byscripts\StaticEntity\Tests\Fixtures\Civility', $civility);
-    }
-
     public function testAlternativeSameInstance()
     {
         $civility1 = StaticEntity::get('mr', 'Byscripts\StaticEntity\Tests\Fixtures\Civility');
         $civility2 = Civility::get('mr');
 
         $this->assertSame($civility1, $civility2);
-
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage not exists
-     */
-    public function testNotExists()
-    {
-        StaticEntity::get('mr', 'Byscripts\StaticEntity\Tests\Fixtures\NotExists');
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage must extends StaticEntity
-     */
-    public function testNotExtends()
-    {
-        StaticEntity::get('foo', 'Byscripts\StaticEntity\Tests\Fixtures\NotExtends');
     }
 
     /**
@@ -96,12 +71,31 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
         MissingProperty::get('foo');
     }
 
+    public function testExists()
+    {
+        $this->assertTrue(
+            Civility::exists('mr')
+        );
+
+        $this->assertFalse(
+            Civility::exists('non-existent-id')
+        );
+    }
+
+    public function testToId()
+    {
+        $civility = Civility::get('mr');
+
+        $this->assertEquals('mr', Civility::toId($civility));
+        $this->assertEquals('mr', Civility::toId('mr'));
+    }
+
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage $class cannot be null
+     * @expectedExceptionMessage Invalid parameter
      */
-    public function testNoClass()
+    public function testBadToId()
     {
-        StaticEntity::get('foo');
+        Civility::toId('non-existent-id');
     }
 }
