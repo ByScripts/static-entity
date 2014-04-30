@@ -7,7 +7,6 @@ use Byscripts\StaticEntity\Tests\Fixtures\Civility;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidData;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidDataSet;
 use Byscripts\StaticEntity\Tests\Fixtures\MissingProperty;
-use Byscripts\StaticEntity\Tests\Fixtures\NotExtends;
 
 class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,6 +70,15 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
         MissingProperty::get('foo');
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage must be null
+     */
+    public function testClassSet()
+    {
+        Civility::get('mr', 'Some\Class\Defined');
+    }
+
     public function testExists()
     {
         $this->assertTrue(
@@ -97,5 +105,46 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
     public function testBadToId()
     {
         Civility::toId('non-existent-id');
+    }
+
+    public function testGetAll()
+    {
+        $all = Civility::getAll();
+
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all[0]);
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all[1]);
+
+        $this->assertEquals('mr', $all[0]->getId());
+        $this->assertEquals('mrs', $all[1]->getId());
+    }
+
+    public function testGetAssoc()
+    {
+        $assoc = Civility::getAssoc();
+
+        $this->assertArrayHasKey('mr', $assoc);
+        $this->assertArrayHasKey('mrs', $assoc);
+
+        $this->assertEquals('Mister', $assoc['mr']);
+        $this->assertEquals('Misses', $assoc['mrs']);
+    }
+
+    public function testGetAssocWithParam()
+    {
+        $assoc = Civility::getAssoc('shortName');
+
+        $this->assertArrayHasKey('mr', $assoc);
+        $this->assertArrayHasKey('mrs', $assoc);
+
+        $this->assertEquals('Mr', $assoc['mr']);
+        $this->assertEquals('Mrs', $assoc['mrs']);
+    }
+
+    public function testIs()
+    {
+        $civility = Civility::get('mr');
+
+        $this->assertTrue($civility->is('mr'));
+        $this->assertFalse($civility->is('mrs'));
     }
 }

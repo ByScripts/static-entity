@@ -114,4 +114,37 @@ class StaticEntityIndirectTest extends \PHPUnit_Framework_TestCase
     {
         StaticEntity::toId('non-existent-id', '\Byscripts\StaticEntity\Tests\Fixtures\Civility');
     }
+
+    public function testGetAll()
+    {
+        $all = StaticEntity::getAll('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all[0]);
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all[1]);
+
+        $this->assertEquals('mr', $all[0]->getId());
+        $this->assertEquals('mrs', $all[1]->getId());
+    }
+
+    public function testGetAssoc()
+    {
+        $assoc = StaticEntity::getAssoc(null, '\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+
+        $this->assertArrayHasKey('mr', $assoc);
+        $this->assertArrayHasKey('mrs', $assoc);
+
+        $this->assertEquals('Mister', $assoc['mr']);
+        $this->assertEquals('Misses', $assoc['mrs']);
+    }
+
+    public function testGetAssocWithParam()
+    {
+        $assoc = StaticEntity::getAssoc('shortName', '\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+
+        $this->assertArrayHasKey('mr', $assoc);
+        $this->assertArrayHasKey('mrs', $assoc);
+
+        $this->assertEquals('Mr', $assoc['mr']);
+        $this->assertEquals('Mrs', $assoc['mrs']);
+    }
 }
