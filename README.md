@@ -5,8 +5,10 @@
 ### Add the package in your composer.json
 
 ```json
-require: {
-    "byscripts/static-entity": "~0.1.1"
+{
+    require: {
+        "byscripts/static-entity": "~0.1.1"
+    }
 }
 ```
 
@@ -96,32 +98,34 @@ class WebBrowser extends StaticEntity
 // Get an instance of WebBrowser, hydrated with Firefox data
 $firefox = WebBrowser::get(WebBrowser::FIREFOX);
 
-// The getId() method is always available. It returns the key used in the getDataSet() method;
-$firefox->getId();      // 2
+// The getId() method is always available.
+// It returns the key used in the getDataSet() method;
+$firefox->getId(); // 2
 
 // Other methods are ones implemented in the static entity
-$firefox->getName();    // Firefox
+$firefox->getName(); // Firefox
 
 // The is() method check the argument against the instance ID
 $firefox->is(WebBrowser::CHROMIUM); // false
-$firefox->is(WebBrowser::FIREFOX); // true
+$firefox->is(WebBrowser::FIREFOX);  // true
 
 // The toId() method transform an entity to ID.
-// If an id is passed, it is returned as is. (useful in a Setter method)
-WebBrowser::toId(2);        // 2
+// If an id is passed, it is returned as is, after checking it exists.
+// The method is mainly intended for a setter method to accept both type.
 WebBrowser::toId($firefox); // 2
+WebBrowser::toId(2);        // 2
 
 // The getIds() returns an array of ... well, ids.
 WebBrowser::getIds(); // [1, 2, 3, 4, 5]
 
-// The getAssoc() returns an associative array with ID as key, and the name attribute as value
+// The getAssoc() returns an associative array with `id` as key and `name` as value
 WebBrowser::getAssoc(); // [1 => 'Chromium', 2 => 'Firefox', 3 => 'Internet Explorer', ...]
 
 // You can also pass the name of an argument you want to use as value
 WebBrowser::getAssoc('brand'); // [1 => 'Google', 2 => 'Mozilla', 3 => 'Microsoft', ...]
 
 // The getAll() method return an array containing all instances of entities
-WebBrowser::getAll(); [Object, Object, ...]
+WebBrowser::getAll(); // [Object, Object, ...]
 
 // The exists() method check whether the passed ID exists in data set
 WebBrowser::exists(3); // true
