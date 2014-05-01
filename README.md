@@ -9,7 +9,7 @@ Provides an easy way to get some entity/model behavior with static data
 ```json
 {
     "require": {
-        "byscripts/static-entity": "~0.1.1"
+        "byscripts/static-entity": "~0.1.5"
     }
 }
 ```
