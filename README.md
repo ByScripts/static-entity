@@ -1,4 +1,6 @@
-# Work and documentation in progress. Not ready for production.
+# Byscripts Static Entity
+
+Provides an easy way to get some entity/model behavior with static data
 
 ## Installation
 
@@ -98,6 +100,9 @@ class WebBrowser extends StaticEntity
 // Get an instance of WebBrowser, hydrated with Firefox data
 $firefox = WebBrowser::get(WebBrowser::FIREFOX);
 
+// Instanciated objects are singleton
+WebBrowser::get(WebBrowser::FIREFOX) === WebBrowser::get(WebBrowser::FIREFOX); // true
+
 // The getId() method is always available.
 // It returns the key used in the getDataSet() method;
 $firefox->getId(); // 2
@@ -130,4 +135,13 @@ WebBrowser::getAll(); // [Object, Object, ...]
 // The exists() method check whether the passed ID exists in data set
 WebBrowser::exists(3); // true
 WebBrowser::exists(9); // false
+```
+
+#### Alternative usage
+
+All static methods can be called indirectly from StaticEntity class by passing the desired class as last method argument.
+
+```
+StaticEntity::get(2, 'WebBrowser');
+StaticEntity::getAssoc('brand', 'WebBrowser');
 ```
