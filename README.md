@@ -133,9 +133,9 @@ WebBrowser::hasId(9); // false
 
 #### Alternative usage
 
-You can also directly use the StaticEntityBuilder to achieve same result
+You can also use the StaticEntityBuilder class
 
-```
+```php
 $builder = new StaticEntityBuilder('WebBrowser');
 
 $builder->get(WebBrowser::FIREFOX);
