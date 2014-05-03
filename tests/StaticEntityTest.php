@@ -12,7 +12,6 @@ use Byscripts\StaticEntity\Tests\Fixtures\MissingProperty;
  * Class StaticEntityTest
  *
  * @author Thierry Goettelmann <thierry@byscripts.info>
- * @runTestsInSeparateProcesses
  */
 class StaticEntityTest extends \PHPUnit_Framework_TestCase
 {
