@@ -168,4 +168,12 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($civility->is('mr'));
         $this->assertFalse($civility->is('mrs'));
     }
+
+    public function testGetIds()
+    {
+        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $ids = $builder->getIds();
+
+        $this->assertEquals(array('mr', 'mrs'), $ids);
+    }
 }

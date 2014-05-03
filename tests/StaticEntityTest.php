@@ -162,6 +162,13 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($civility->is('mrs'));
     }
 
+    public function testGetIds()
+    {
+        $ids = Civility::getIds();
+
+        $this->assertEquals(array('mr', 'mrs'), $ids);
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage You cannot call
