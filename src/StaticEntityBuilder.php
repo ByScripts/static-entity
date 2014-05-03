@@ -160,4 +160,21 @@ class StaticEntityBuilder
 
         $this->instances[$id] = $instance;
     }
+
+    /**
+     * @param mixed|StaticEntity $staticEntity
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function convertToId($staticEntity)
+    {
+        if ($staticEntity instanceof StaticEntity) {
+            return $staticEntity->getId();
+        } elseif (!$this->hasId($staticEntity)) {
+            throw new \Exception(sprintf('Unable to convert "%s" to a valid id for class %s', $staticEntity, $this->class));
+        }
+
+        return $staticEntity;
+    }
 }

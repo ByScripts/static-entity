@@ -107,13 +107,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function toId($idOrEntity)
     {
-        if ($idOrEntity instanceof StaticEntity) {
-            return $idOrEntity->getId();
-        } elseif (self::exists($idOrEntity)) {
-            return $idOrEntity;
-        }
-
-        throw new \Exception(sprintf('%s => Invalid parameter: %s', __METHOD__, $idOrEntity));
+        return self::getBuilder()->convertToId($idOrEntity);
     }
 
 
