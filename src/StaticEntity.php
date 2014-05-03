@@ -18,26 +18,26 @@ namespace Byscripts\StaticEntity;
 abstract class StaticEntity implements StaticEntityInterface
 {
     /**
-     * @var \ReflectionClass[]
+     * @var  StaticEntityBuilder
      */
-    static private $reflections = array();
-
-    /**
-     * @var array[]
-     */
-    static private $dataSets = array();
-
-    /**
-     * @var array[]
-     */
-    static private $instances = array();
-
-    static private $allLoaded = false;
+    private static $builders;
 
     /**
      * @var mixed
      */
     protected $id;
+
+    /**
+     * Get a static entity instance
+     *
+     * @param mixed $identifier
+     *
+     * @return mixed
+     */
+    static public function get($identifier)
+    {
+        return self::getBuilder()->get($identifier);
+    }
 
     /**
      * Check the existence of the ID
@@ -50,11 +50,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function exists($id)
     {
-        $class = self::ensureClass(__METHOD__);
-
-        self::initDataSet($class);
-
-        return array_key_exists($id, self::$dataSets[$class]);
+        return in_array($id, self::getBuilder()->getIds(), true);
     }
 
     /**
@@ -66,19 +62,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getAll()
     {
-        $class = self::ensureClass(__METHOD__);
-
-        if (self::$allLoaded[$class]) {
-            return self::$instances[$class];
-        }
-
-        foreach (self::getIds() as $id) {
-            self::get($id);
-        }
-
-        self::$allLoaded[$class] = true;
-
-        return self::$instances[$class];
+        return self::getBuilder()->getAll();
     }
 
     /**
@@ -92,20 +76,11 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getAssoc($valueKey = 'name')
     {
-        $class = self::ensureClass(__METHOD__);
-
-        self::initDataSet($class);
-
         if (empty($valueKey)) {
             $valueKey = 'name';
         }
 
-        return array_map(
-            function ($arr) use ($valueKey) {
-                return $arr[$valueKey];
-            },
-            self::$dataSets[$class]
-        );
+        return self::getBuilder()->getAssociativeArray($valueKey);
     }
 
     /**
@@ -117,11 +92,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getIds()
     {
-        $class = self::ensureClass(__METHOD__);
-
-        self::initDataSet($class);
-
-        return array_keys(self::$dataSets[$class]);
+        return self::getBuilder()->getIds();
     }
 
     /**
@@ -145,94 +116,26 @@ abstract class StaticEntity implements StaticEntityInterface
         throw new \Exception(sprintf('%s => Invalid parameter: %s', __METHOD__, $idOrEntity));
     }
 
+
     /**
-     * @param mixed $id
+     * Get the StaticEntity builder
      *
      * @throws \Exception
-     *
-     * @return null|static
+     * @return StaticEntityBuilder
      */
-    static public function get($id)
+    private static function getBuilder()
     {
-        $class = self::ensureClass(__METHOD__);
+        $class = get_called_class();
 
-        self::init($class);
-
-        if (array_key_exists($id, self::$instances[$class])) {
-            return self::$instances[$class][$id];
-        } elseif (!array_key_exists($id, self::$dataSets[$class])) {
-            return self::$instances[$class][$id] = null;
+        if (__CLASS__ === $class) {
+            throw new \Exception('You cannot call methods directly on StaticEntity class');
         }
 
-        $instance = new $class;
-
-        foreach (self::$dataSets[$class][$id] as $propertyName => $propertyValue) {
-            $property = self::$reflections[$class]->getProperty($propertyName);
-            $property->setAccessible(true);
-            $property->setValue($instance, $propertyValue);
+        if (!isset(self::$builders[$class])) {
+            self::$builders[$class] = new StaticEntityBuilder($class);
         }
 
-        return self::$instances[$class][$id] = $instance;
-    }
-
-    static private function init($class)
-    {
-        if (array_key_exists($class, self::$instances)) {
-            return;
-        }
-
-        self::initDataSet($class);
-
-        self::$instances[$class]   = array();
-        self::$reflections[$class] = new \ReflectionClass($class);
-    }
-
-    private static function initDataSet($class)
-    {
-        if (array_key_exists($class, self::$dataSets)) {
-            return;
-        }
-
-        $dataSet = static::getDataSet();
-
-        if (!is_array($dataSet)) {
-            throw new \Exception(sprintf('%s::getDataSet() must returns an array', $class));
-        }
-
-        foreach ($dataSet as $id => $data) {
-            self::checkData($class, $id, $data);
-            $dataSet[$id]['id'] = $id;
-        }
-
-        self::$dataSets[$class] = $dataSet;
-    }
-
-    private static function checkData($class, $id, $data)
-    {
-        if (!is_array($data)) {
-            throw new \Exception(
-                sprintf('%s::getDataSet() => Data at index "%s" must be an array', $class, $id)
-            );
-        }
-
-        foreach (array_keys($data) as $property) {
-            if (!property_exists($class, $property)) {
-                throw new \Exception(
-                    sprintf('Property "%s" not exists in class "%s"', $property, $class)
-                );
-            }
-        }
-    }
-
-    private static function ensureClass($method)
-    {
-        $calledClass = get_called_class();
-
-        if (__CLASS__ === $calledClass) {
-            throw new \Exception(sprintf('You cannot call %s() directly', $method));
-        }
-
-        return $calledClass;
+        return self::$builders[$class];
     }
 
     /**

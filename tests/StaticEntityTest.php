@@ -62,7 +62,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage not exists
+     * @expectedExceptionMessage Property not-exists does not exist
      */
     public function testMissingProperty()
     {
@@ -167,8 +167,53 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Exception
      * @expectedExceptionMessage You cannot call
      */
-    public function testPublicMethodCallOnStaticEntityClass()
+    public function testGetOnStaticEntityClass()
     {
-        StaticEntity::get(25);
+        StaticEntity::get(1);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot call
+     */
+    public function testExistsOnStaticEntityClass()
+    {
+        StaticEntity::exists(1);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot call
+     */
+    public function testGetAllOnStaticEntityClass()
+    {
+        StaticEntity::getAll();
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot call
+     */
+    public function testGetAssocOnStaticEntityClass()
+    {
+        StaticEntity::getAssoc();
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot call
+     */
+    public function testGetIdsOnStaticEntityClass()
+    {
+        StaticEntity::getIds();
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot call
+     */
+    public function testToIdOnStaticEntityClass()
+    {
+        StaticEntity::toId(1);
     }
 }
