@@ -8,10 +8,17 @@ use Byscripts\StaticEntity\Tests\Fixtures\InvalidData;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidDataSet;
 use Byscripts\StaticEntity\Tests\Fixtures\MissingProperty;
 
-class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class StaticEntityTest
+ *
+ * @author Thierry Goettelmann <thierry@byscripts.info>
+ * @runTestsInSeparateProcesses
+ */
+class StaticEntityTest extends \PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
+        /** @var $civility Civility */
         $civility = Civility::get('mr');
 
         $this->assertInstanceOf('Byscripts\StaticEntity\Tests\Fixtures\Civility', $civility);
@@ -35,17 +42,9 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($civility1, $civility2);
     }
 
-    public function testAlternativeSameInstance()
-    {
-        $civility1 = StaticEntity::get('mr', 'Byscripts\StaticEntity\Tests\Fixtures\Civility');
-        $civility2 = Civility::get('mr');
-
-        $this->assertSame($civility1, $civility2);
-    }
-
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage must be an array
+     * @expectedExceptionMessage must returns an array
      */
     public function testInvalidDataSet()
     {
@@ -70,15 +69,6 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
         MissingProperty::get('foo');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage must be null
-     */
-    public function testClassSet()
-    {
-        Civility::get('mr', 'Some\Class\Defined');
-    }
-
     public function testExists()
     {
         $this->assertTrue(
@@ -96,6 +86,7 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mr', Civility::toId($civility));
         $this->assertEquals('mr', Civility::toId('mr'));
+
     }
 
     /**
@@ -109,18 +100,41 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAll()
     {
+        /** @var $all Civility[] */
         $all = Civility::getAll();
 
-        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all[0]);
-        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all[1]);
+        $this->assertArrayHasKey('mr', $all);
+        $this->assertArrayHasKey('mrs', $all);
 
-        $this->assertEquals('mr', $all[0]->getId());
-        $this->assertEquals('mrs', $all[1]->getId());
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all['mr']);
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $all['mrs']);
+
+        $this->assertEquals('Mister', $all['mr']->getName());
+        $this->assertEquals('Misses', $all['mrs']->getName());
+    }
+
+    public function testGetAllTwice()
+    {
+        $all1 = Civility::getAll();
+        $all2 = Civility::getAll();
+
+        $this->assertSame($all1, $all2);
     }
 
     public function testGetAssoc()
     {
         $assoc = Civility::getAssoc();
+
+        $this->assertArrayHasKey('mr', $assoc);
+        $this->assertArrayHasKey('mrs', $assoc);
+
+        $this->assertEquals('Mister', $assoc['mr']);
+        $this->assertEquals('Misses', $assoc['mrs']);
+    }
+
+    public function testGetAssocWithEmptyParam()
+    {
+        $assoc = Civility::getAssoc(null);
 
         $this->assertArrayHasKey('mr', $assoc);
         $this->assertArrayHasKey('mrs', $assoc);
@@ -142,9 +156,19 @@ class StaticEntityDirectTest extends \PHPUnit_Framework_TestCase
 
     public function testIs()
     {
+        /** @var $civility Civility */
         $civility = Civility::get('mr');
 
         $this->assertTrue($civility->is('mr'));
         $this->assertFalse($civility->is('mrs'));
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage You cannot call
+     */
+    public function testPublicMethodCallOnStaticEntityClass()
+    {
+        StaticEntity::get(25);
     }
 }
