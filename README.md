@@ -2,7 +2,7 @@
 
 Provides an easy way to get some entity/model behavior with static data
 
-[![Build Status](https://travis-ci.org/ByScripts/ByscriptsStaticEntity.svg?branch=master)](https://travis-ci.org/ByScripts/ByscriptsStaticEntity) [![Latest Stable Version](https://poser.pugx.org/byscripts/static-entity/v/stable.png)](https://packagist.org/packages/byscripts/static-entity) [![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity)
+[![Build Status](https://travis-ci.org/ByScripts/ByscriptsStaticEntity.svg?branch=master)](https://travis-ci.org/ByScripts/ByscriptsStaticEntity) [![Latest Stable Version](https://poser.pugx.org/byscripts/static-entity/v/stable.png)](https://packagist.org/packages/byscripts/static-entity) [![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/badges/quality-score.png?s=7f14b935e4a281cbaea56eeacdb5dbe8bf37bc75)](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/) [![Code Coverage](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/badges/coverage.png?s=d6250c0ecf468198873e667d009fe35aa80f9558)](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/)
 
 ## Installation
 
