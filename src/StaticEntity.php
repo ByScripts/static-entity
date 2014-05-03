@@ -52,7 +52,7 @@ abstract class StaticEntity implements StaticEntityInterface
     {
         $class = self::ensureClass(__METHOD__);
 
-        self::initDataSet();
+        self::initDataSet($class);
 
         return array_key_exists($id, self::$dataSets[$class]);
     }
@@ -94,7 +94,7 @@ abstract class StaticEntity implements StaticEntityInterface
     {
         $class = self::ensureClass(__METHOD__);
 
-        self::initDataSet();
+        self::initDataSet($class);
 
         if (empty($valueKey)) {
             $valueKey = 'name';
@@ -119,7 +119,7 @@ abstract class StaticEntity implements StaticEntityInterface
     {
         $class = self::ensureClass(__METHOD__);
 
-        self::init();
+        self::initDataSet($class);
 
         return array_keys(self::$dataSets[$class]);
     }
@@ -156,7 +156,7 @@ abstract class StaticEntity implements StaticEntityInterface
     {
         $class = self::ensureClass(__METHOD__);
 
-        self::init();
+        self::init($class);
 
         if (array_key_exists($id, self::$instances[$class])) {
             return self::$instances[$class][$id];
@@ -175,24 +175,20 @@ abstract class StaticEntity implements StaticEntityInterface
         return self::$instances[$class][$id] = $instance;
     }
 
-    static private function init()
+    static private function init($class)
     {
-        $class = get_called_class();
-
         if (array_key_exists($class, self::$instances)) {
             return;
         }
 
-        self::initDataSet();
+        self::initDataSet($class);
 
         self::$instances[$class]   = array();
         self::$reflections[$class] = new \ReflectionClass($class);
     }
 
-    private static function initDataSet()
+    private static function initDataSet($class)
     {
-        $class = get_called_class();
-
         if (array_key_exists($class, self::$dataSets)) {
             return;
         }
@@ -204,17 +200,15 @@ abstract class StaticEntity implements StaticEntityInterface
         }
 
         foreach ($dataSet as $id => $data) {
-            self::checkData($id, $data);
+            self::checkData($class, $id, $data);
             $dataSet[$id]['id'] = $id;
         }
 
         self::$dataSets[$class] = $dataSet;
     }
 
-    private static function checkData($id, $data)
+    private static function checkData($class, $id, $data)
     {
-        $class = get_called_class();
-
         if (!is_array($data)) {
             throw new \Exception(
                 sprintf('%s::getDataSet() => Data at index "%s" must be an array', $class, $id)
