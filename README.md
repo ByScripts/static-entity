@@ -2,6 +2,8 @@
 
 Provides an easy way to get some entity/model behavior with static data
 
+[![Build Status](https://travis-ci.org/ByScripts/ByscriptsStaticEntity.svg?branch=master)](https://travis-ci.org/ByScripts/ByscriptsStaticEntity) [![Latest Stable Version](https://poser.pugx.org/byscripts/static-entity/v/stable.png)](https://packagist.org/packages/byscripts/static-entity) [![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity)
+
 ## Installation
 
 ### Add the package in your composer.json
@@ -30,32 +32,32 @@ class WebBrowser extends StaticEntity
     const IE       = 3;
     const OPERA    = 4;
     const SAFARI   = 5;
-    
+
     private $name;
     private $brand;
     private $engine;
     private $license;
-    
+
     public function getName()
     {
         return $this->name;
     }
-    
+
     public function getBrand()
     {
         return $this->brand;
     }
-    
+
     public function getEngine()
     {
         return $this->engine;
     }
-    
+
     public function getLicense()
     {
         return $this->license;
     }
-    
+
     static public function getDataSet()
     {
         return [
