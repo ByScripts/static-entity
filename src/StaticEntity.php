@@ -48,7 +48,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getAll($class = null)
     {
-        $class = static::parseClass($class, __FUNCTION__);
+        $class = self::parseClass($class, __FUNCTION__);
 
         return array_map(
             function ($id) use ($class) {
@@ -69,7 +69,7 @@ abstract class StaticEntity implements StaticEntityInterface
     static public function getAssoc($valueKey = 'name', $class = null)
     {
         /** @var StaticEntity $class */
-        $class = static::parseClass($class, __FUNCTION__);
+        $class = self::parseClass($class, __FUNCTION__);
 
         if (empty($valueKey)) {
             $valueKey = 'name';
@@ -108,11 +108,11 @@ abstract class StaticEntity implements StaticEntityInterface
     {
         self::initClass($class);
 
-        if (array_key_exists($id, self::$classes[ $class ]['instances'])) {
+        if (array_key_exists($id, (array) self::$classes[ $class ]['instances'])) {
             return self::$classes[ $class ]['instances'][ $id ];
         }
 
-        if (!array_key_exists($id, self::$classes[ $class ]['dataSet'])) {
+        if (!array_key_exists($id, (array) self::$classes[ $class ]['dataSet'])) {
             return self::$classes[ $class ]['instances'][ $id ] = null;
         }
 
