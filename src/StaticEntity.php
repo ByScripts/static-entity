@@ -50,7 +50,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function exists($id)
     {
-        return in_array($id, self::getBuilder()->getIds(), true);
+        return self::getBuilder()->hasId($id);
     }
 
     /**

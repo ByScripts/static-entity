@@ -83,6 +83,16 @@ class StaticEntityBuilder
     }
 
     /**
+     * @param mixed $id
+     *
+     * @return bool
+     */
+    public function hasId($id)
+    {
+        return in_array($id, $this->ids, true);
+    }
+
+    /**
      * @throws \Exception
      *
      * @return array
