@@ -4,14 +4,14 @@ namespace Byscripts\StaticEntity;
 
 abstract class StaticEntity implements StaticEntityInterface
 {
-    protected $id;
     static private $classes = array();
+    protected      $id;
 
     /**
      * Check the existence of the ID
      *
-     * @param mixed $id The id to be tested
-     * @param null  $class
+     * @param mixed       $id The id to be tested
+     * @param string|null $class
      *
      * @return bool Whether the ID exists or not
      */
@@ -42,7 +42,7 @@ abstract class StaticEntity implements StaticEntityInterface
     /**
      * Returns an array of all instances
      *
-     * @param null $class
+     * @param string|null $class
      *
      * @return array
      */
@@ -77,7 +77,7 @@ abstract class StaticEntity implements StaticEntityInterface
 
         return array_map(
             function ($arr) use ($valueKey) {
-                return $arr[ $valueKey ];
+                return $arr[$valueKey];
             },
             $class::getDataSet()
         );
@@ -96,112 +96,6 @@ abstract class StaticEntity implements StaticEntityInterface
         $class = self::parseClass($class, __FUNCTION__);
 
         return array_keys($class::getDataSet());
-    }
-
-    /**
-     * @param $id
-     * @param $class
-     *
-     * @return null|StaticEntity
-     */
-    static private function getInstance($id, $class)
-    {
-        self::initClass($class);
-
-        if (array_key_exists($id, (array) self::$classes[ $class ]['instances'])) {
-            return self::$classes[ $class ]['instances'][ $id ];
-        }
-
-        if (!array_key_exists($id, (array) self::$classes[ $class ]['dataSet'])) {
-            return self::$classes[ $class ]['instances'][ $id ] = null;
-        }
-
-        $instance = new $class;
-
-        foreach (self::$classes[ $class ]['dataSet'][ $id ] as $propertyName => $propertyValue) {
-            /** @var \ReflectionClass $reflection */
-            $reflection = self::$classes[ $class ]['reflection'];
-            $property = $reflection->getProperty($propertyName);
-            $property->setAccessible(true);
-            $property->setValue($instance, $propertyValue);
-        }
-
-        return self::$classes[ $class ]['instances'][ $id ] = $instance;
-    }
-
-    /**
-     * @param $class
-     *
-     * @throws \Exception
-     */
-    static private function initClass($class)
-    {
-        if (array_key_exists($class, self::$classes)) {
-            return;
-        }
-
-        if (!is_subclass_of($class, __CLASS__)) {
-            throw new \Exception('Class must extends StaticEntity');
-        }
-
-        self::$classes[ $class ] = array(
-            'instances'  => array(),
-            'dataSet'    => null,
-            'reflection' => null
-        );
-
-        self::initDataSet($class);
-    }
-
-    /**
-     * @param $class
-     *
-     * @throws \Exception
-     */
-    static private function initDataSet($class)
-    {
-        $dataSet = call_user_func(array($class, 'getDataSet'));
-
-        if (!is_array($dataSet)) {
-            throw new \Exception('$dataSet must be an array');
-        }
-
-        $reflection = new \ReflectionClass($class);
-
-        foreach ($dataSet as $id => $data) {
-            if (!is_array($data)) {
-                throw new \Exception(sprintf('Data at index "%s" must be an array', $id));
-            }
-            $dataSet[ $id ]['id'] = $id;
-
-            foreach ($dataSet[ $id ] as $propertyName => $value) {
-                if (!$reflection->hasProperty($propertyName)) {
-                    throw new \Exception(sprintf('Property "%s" not exists', $propertyName));
-                }
-            }
-        }
-
-        self::$classes[ $class ]['reflection'] = $reflection;
-        self::$classes[ $class ]['dataSet']    = $dataSet;
-    }
-
-    static private function parseClass($class, $method)
-    {
-        $calledClass = get_called_class();
-
-        if (__CLASS__ === $calledClass) {
-            if (null === $class) {
-                throw new \Exception(__CLASS__ . '::' . $method . ' => $class cannot be null');
-            } elseif (!class_exists($class)) {
-                throw new \Exception(__CLASS__ . '::' . $method . ' => Class ' . $class . ' not exists');
-            }
-
-            return $class;
-        } elseif (null !== $class && $class !== $calledClass) {
-            throw new \Exception($calledClass . '::' . $method . ' => $class must be null');
-        }
-
-        return $calledClass;
     }
 
     /**
@@ -226,6 +120,119 @@ abstract class StaticEntity implements StaticEntityInterface
     }
 
     /**
+     * @param mixed  $id
+     * @param string $class
+     *
+     * @return null|StaticEntity
+     */
+    static private function getInstance($id, $class)
+    {
+        self::initClass($class);
+
+        if (array_key_exists($id, (array)self::$classes[$class]['instances'])) {
+            return self::$classes[$class]['instances'][$id];
+        }
+
+        if (!array_key_exists($id, (array)self::$classes[$class]['dataSet'])) {
+            return self::$classes[$class]['instances'][$id] = null;
+        }
+
+        $instance = new $class;
+
+        foreach (self::$classes[$class]['dataSet'][$id] as $propertyName => $propertyValue) {
+            /** @var \ReflectionClass $reflection */
+            $reflection = self::$classes[$class]['reflection'];
+            $property   = $reflection->getProperty($propertyName);
+            $property->setAccessible(true);
+            $property->setValue($instance, $propertyValue);
+        }
+
+        return self::$classes[$class]['instances'][$id] = $instance;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @throws \Exception
+     */
+    static private function initClass($class)
+    {
+        if (array_key_exists($class, self::$classes)) {
+            return;
+        }
+
+        if (!is_subclass_of($class, __CLASS__)) {
+            throw new \Exception('Class must extends StaticEntity');
+        }
+
+        self::$classes[$class] = array(
+            'instances'  => array(),
+            'dataSet'    => null,
+            'reflection' => null
+        );
+
+        self::initDataSet($class);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @throws \Exception
+     */
+    static private function initDataSet($class)
+    {
+        $dataSet = call_user_func(array($class, 'getDataSet'));
+
+        if (!is_array($dataSet)) {
+            throw new \Exception('$dataSet must be an array');
+        }
+
+        $reflection = new \ReflectionClass($class);
+
+        foreach ($dataSet as $id => $data) {
+            if (!is_array($data)) {
+                throw new \Exception(sprintf('Data at index "%s" must be an array', $id));
+            }
+            $dataSet[$id]['id'] = $id;
+
+            foreach ($dataSet[$id] as $propertyName => $value) {
+                if (!$reflection->hasProperty($propertyName)) {
+                    throw new \Exception(sprintf('Property "%s" not exists', $propertyName));
+                }
+            }
+        }
+
+        self::$classes[$class]['reflection'] = $reflection;
+        self::$classes[$class]['dataSet']    = $dataSet;
+    }
+
+    /**
+     * @param string $class
+     * @param string $method
+     *
+     * @return string
+     * @throws \Exception
+     */
+    static private function parseClass($class, $method)
+    {
+        $calledClass = get_called_class();
+
+        if (__CLASS__ === $calledClass) {
+            if (null === $class) {
+                throw new \Exception(__CLASS__ . '::' . $method . ' => $class cannot be null');
+            } elseif (!class_exists($class)) {
+                throw new \Exception(__CLASS__ . '::' . $method . ' => Class ' . $class . ' not exists');
+            }
+
+            return $class;
+        } elseif (null !== $class && $class !== $calledClass) {
+            throw new \Exception($calledClass . '::' . $method . ' => $class must be null');
+        }
+
+        return $calledClass;
+    }
+
+    /**
      * Returns the ID of the current instance
      *
      * @return mixed
@@ -238,7 +245,7 @@ abstract class StaticEntity implements StaticEntityInterface
     /**
      * Check if the passed ID is the ID of the current instance
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return bool
      */
