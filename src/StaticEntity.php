@@ -52,7 +52,7 @@ abstract class StaticEntity implements StaticEntityInterface
 
         return array_map(
             function ($id) use ($class) {
-                return self::get($id, $class);
+                return StaticEntity::get($id, $class);
             },
             self::getIds($class)
         );
