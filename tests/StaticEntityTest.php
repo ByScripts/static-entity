@@ -61,7 +61,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Property not-exists does not exist
+     * @expectedExceptionMessage not-exists does not exist
      */
     public function testMissingProperty()
     {
@@ -90,7 +90,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Invalid parameter
+     * @expectedExceptionMessage Unable to convert
      */
     public function testBadToId()
     {
