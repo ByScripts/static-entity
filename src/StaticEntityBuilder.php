@@ -20,7 +20,7 @@ class StaticEntityBuilder
     private $class;
 
     private $instances = array();
-    private $ids = array();
+    private $ids       = array();
     private $dataSet;
 
     /**
@@ -50,9 +50,13 @@ class StaticEntityBuilder
      * @return array
      * @throws \Exception
      */
-    public function getAssociativeArray($valueKey)
+    public function getAssociative($valueKey = 'name')
     {
         $this->initDataSet();
+
+        if (empty($valueKey)) {
+            $valueKey = 'name';
+        }
 
         return array_map(
             function ($arr) use ($valueKey) {
@@ -90,6 +94,25 @@ class StaticEntityBuilder
     public function hasId($id)
     {
         return in_array($id, $this->ids, true);
+    }
+
+    /**
+     * @param mixed|StaticEntity $staticEntity
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function convertToId($staticEntity)
+    {
+        if ($staticEntity instanceof StaticEntity) {
+            return $staticEntity->getId();
+        } elseif (!$this->hasId($staticEntity)) {
+            throw new \Exception(
+                sprintf('Unable to convert "%s" to a valid id for class %s', $staticEntity, $this->class)
+            );
+        }
+
+        return $staticEntity;
     }
 
     /**
@@ -159,22 +182,5 @@ class StaticEntityBuilder
         }
 
         $this->instances[$id] = $instance;
-    }
-
-    /**
-     * @param mixed|StaticEntity $staticEntity
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public function convertToId($staticEntity)
-    {
-        if ($staticEntity instanceof StaticEntity) {
-            return $staticEntity->getId();
-        } elseif (!$this->hasId($staticEntity)) {
-            throw new \Exception(sprintf('Unable to convert "%s" to a valid id for class %s', $staticEntity, $this->class));
-        }
-
-        return $staticEntity;
     }
 }

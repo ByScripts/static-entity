@@ -141,7 +141,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
     public function testGetAssoc()
     {
         $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
-        $assoc = $builder->getAssociativeArray('name');
+        $assoc = $builder->getAssociative('name');
 
         $this->assertArrayHasKey('mr', $assoc);
         $this->assertArrayHasKey('mrs', $assoc);
@@ -149,7 +149,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Mister', $assoc['mr']);
         $this->assertEquals('Misses', $assoc['mrs']);
 
-        $assoc = $builder->getAssociativeArray('shortName');
+        $assoc = $builder->getAssociative('shortName');
 
         $this->assertArrayHasKey('mr', $assoc);
         $this->assertArrayHasKey('mrs', $assoc);

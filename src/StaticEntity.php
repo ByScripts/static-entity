@@ -48,7 +48,7 @@ abstract class StaticEntity implements StaticEntityInterface
      *
      * @return bool Whether the ID exists or not
      */
-    static public function exists($id)
+    static public function hasId($id)
     {
         return self::getBuilder()->hasId($id);
     }
@@ -74,13 +74,9 @@ abstract class StaticEntity implements StaticEntityInterface
      *
      * @return array
      */
-    static public function getAssoc($valueKey = 'name')
+    static public function getAssociative($valueKey = 'name')
     {
-        if (empty($valueKey)) {
-            $valueKey = 'name';
-        }
-
-        return self::getBuilder()->getAssociativeArray($valueKey);
+        return self::getBuilder()->getAssociative($valueKey);
     }
 
     /**

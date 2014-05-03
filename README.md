@@ -8,15 +8,7 @@ Provides an easy way to get some entity/model behavior with static data
 
 ### Add the package in your composer.json
 
-```json
-{
-    "require": {
-        "byscripts/static-entity": "~1.0"
-    }
-}
-```
-
-Then run `composer update` (or `composer update byscripts/static-entity` if you don't want to update all your packages)
+At command line, run `composer require byscripts/static-entity:~2.0`
 
 ### Usage
 
@@ -122,28 +114,35 @@ $firefox->is(WebBrowser::FIREFOX);  // true
 WebBrowser::toId($firefox); // 2
 WebBrowser::toId(2);        // 2
 
-// The getIds() returns an array of ... well, ids.
+// The getIds() method returns an array of all ids present in data set
 WebBrowser::getIds(); // [1, 2, 3, 4, 5]
 
 // The getAssoc() returns an associative array with `id` as key and `name` as value
-WebBrowser::getAssoc(); // [1 => 'Chromium', 2 => 'Firefox', ...]
+WebBrowser::getAssociative(); // [1 => 'Chromium', 2 => 'Firefox', ...]
 
 // You can also pass the name of an argument you want to use as value
-WebBrowser::getAssoc('brand'); // [1 => 'Google', 2 => 'Mozilla', 3 => 'Microsoft', ...]
+WebBrowser::getAssociative('brand'); // [1 => 'Google', 2 => 'Mozilla', 3 => 'Microsoft', ...]
 
-// The getAll() method return an array containing all instances of entities
+// The getAll() method returns an array containing all instances of entities
 WebBrowser::getAll(); // [Object, Object, ...]
 
 // The exists() method check whether the passed ID exists in data set
-WebBrowser::exists(3); // true
-WebBrowser::exists(9); // false
+WebBrowser::hasId(3); // true
+WebBrowser::hasId(9); // false
 ```
 
 #### Alternative usage
 
-All static methods can be called indirectly from StaticEntity class by passing the desired class as last method argument.
+You can also directly use the StaticEntityBuilder to achieve same result
 
 ```
-StaticEntity::get(2, 'WebBrowser');
-StaticEntity::getAssoc('brand', 'WebBrowser');
+$builder = new StaticEntityBuilder('WebBrowser');
+
+$builder->get(WebBrowser::FIREFOX);
+$builder->getAssociative();
+$builder->getAssociative('other');
+$builder->getIds();
+$builder->getAll();
+$builder->hasId(WebBrowser::CHROMIUM);
+$builder->convertToId($instance);
 ```

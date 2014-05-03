@@ -71,11 +71,11 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
     public function testExists()
     {
         $this->assertTrue(
-            Civility::exists('mr')
+            Civility::hasId('mr')
         );
 
         $this->assertFalse(
-            Civility::exists('non-existent-id')
+            Civility::hasId('non-existent-id')
         );
     }
 
@@ -122,7 +122,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssoc()
     {
-        $assoc = Civility::getAssoc();
+        $assoc = Civility::getAssociative();
 
         $this->assertArrayHasKey('mr', $assoc);
         $this->assertArrayHasKey('mrs', $assoc);
@@ -133,7 +133,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssocWithEmptyParam()
     {
-        $assoc = Civility::getAssoc(null);
+        $assoc = Civility::getAssociative(null);
 
         $this->assertArrayHasKey('mr', $assoc);
         $this->assertArrayHasKey('mrs', $assoc);
@@ -144,7 +144,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssocWithParam()
     {
-        $assoc = Civility::getAssoc('shortName');
+        $assoc = Civility::getAssociative('shortName');
 
         $this->assertArrayHasKey('mr', $assoc);
         $this->assertArrayHasKey('mrs', $assoc);
@@ -184,7 +184,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testExistsOnStaticEntityClass()
     {
-        StaticEntity::exists(1);
+        StaticEntity::hasId(1);
     }
 
     /**
@@ -202,7 +202,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAssocOnStaticEntityClass()
     {
-        StaticEntity::getAssoc();
+        StaticEntity::getAssociative();
     }
 
     /**
