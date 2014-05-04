@@ -19,16 +19,33 @@ class StaticEntityManager
 {
     private $class;
 
+    /**
+     * @var StaticEntity[]
+     */
     private $instances = array();
-    private $ids       = array();
+
+    /**
+     * @var array
+     */
+    private $ids = array();
+
+    /**
+     * @var array
+     */
     private $dataSet;
+
+    /**
+     * @var \ReflectionClass
+     */
+    private $reflection;
 
     /**
      * @param string $staticEntityClass
      */
     public function __construct($staticEntityClass)
     {
-        $this->class = $staticEntityClass;
+        $this->class      = $staticEntityClass;
+        $this->reflection = new \ReflectionClass($this->class);
         $this->initDataSet();
     }
 
@@ -39,7 +56,19 @@ class StaticEntityManager
      */
     public function get($id)
     {
-        $this->createInstance($id);
+        if (array_key_exists($id, $this->instances)) {
+            return $this->instances[$id];
+        } elseif (!$data = $this->getData($id)) {
+            return $this->instances[$id] = null;
+        }
+
+        $this->instances[$id] = $this->reflection->newInstance();
+
+        foreach ($data as $property => $value) {
+            $reflectionProperty = $this->reflection->getProperty($property);
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($this->instances[$id], $value);
+        }
 
         return $this->instances[$id];
     }
@@ -52,8 +81,6 @@ class StaticEntityManager
      */
     public function getAssociative($valueKey = 'name')
     {
-        $this->initDataSet();
-
         if (empty($valueKey)) {
             $valueKey = 'name';
         }
@@ -80,7 +107,7 @@ class StaticEntityManager
     public function getAll()
     {
         foreach ($this->ids as $id) {
-            $this->createInstance($id);
+            $this->get($id);
         }
 
         return array_filter($this->instances);
@@ -122,30 +149,19 @@ class StaticEntityManager
      */
     private function initDataSet()
     {
-        if (null !== $this->dataSet) {
-            return;
-        }
-
         $dataSet = call_user_func(array($this->class, 'getDataSet'));
 
-        if (!is_array($dataSet)) {
-            throw new \Exception(sprintf('%s::getDataSet() must returns an array', $this->class));
+        if (!is_array($dataSet) || count($dataSet) !== count(array_filter($dataSet, 'is_array'))) {
+            throw new \Exception('DataSet for class %s seems invalid');
         }
 
-        foreach ($dataSet as $id => $data) {
-            $this->checkData($data, $id);
-            $this->ids[] = $id;
+        $this->ids = array_keys($dataSet);
+
+        foreach ($this->ids as $id) {
             $dataSet[$id]['id'] = $id;
         }
 
         $this->dataSet = $dataSet;
-    }
-
-    private function checkData($data, $id)
-    {
-        if (!is_array($data)) {
-            throw new \Exception(sprintf('Data at index "%s" must be an array in %s', $id, $this->class));
-        }
     }
 
     private function getData($id)
@@ -153,34 +169,5 @@ class StaticEntityManager
         return array_key_exists($id, $this->dataSet)
             ? $this->dataSet[$id]
             : null;
-    }
-
-    /**
-     * @param mixed $id
-     *
-     * @return StaticEntity
-     */
-    private function createInstance($id)
-    {
-        if (array_key_exists($id, $this->instances)) {
-            return;
-        }
-
-        $reflectionClass = new \ReflectionClass($this->class);
-        $instance        = $reflectionClass->newInstance();
-
-        if (null === ($data = $this->getData($id))) {
-            $this->instances[$id] = null;
-
-            return;
-        }
-
-        foreach ($data as $property => $value) {
-            $reflectionProperty = $reflectionClass->getProperty($property);
-            $reflectionProperty->setAccessible(true);
-            $reflectionProperty->setValue($instance, $value);
-        }
-
-        $this->instances[$id] = $instance;
     }
 }
