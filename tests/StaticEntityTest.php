@@ -43,7 +43,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage must returns an array
+     * @expectedExceptionMessage seems invalid
      */
     public function testInvalidDataSet()
     {
@@ -52,7 +52,7 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Data at index
+     * @expectedExceptionMessage seems invalid
      */
     public function testInvalidData()
     {
