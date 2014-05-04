@@ -8,9 +8,7 @@ php:
 before_script:
     - composer install --dev
 
-scripts: phpunit --coverage-clover=coverage.clover
-
-after_script:
-    - ls coverage.clover
+scripts:
+    - phpunit
     - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    - php ocular.phar code-coverage:upload --format=php-clover clover.xml
