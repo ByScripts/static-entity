@@ -120,6 +120,14 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($all1, $all2);
     }
 
+    public function testGetAllAfterInexistent()
+    {
+        Civility::get('not-exists');
+        $all = Civility::getAll();
+
+        $this->assertArrayNotHasKey('not-exists', $all);
+    }
+
     public function testGetAssoc()
     {
         $assoc = Civility::getAssociative();

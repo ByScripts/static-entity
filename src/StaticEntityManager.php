@@ -83,7 +83,7 @@ class StaticEntityManager
             $this->createInstance($id);
         }
 
-        return $this->instances;
+        return array_filter($this->instances);
     }
 
     /**
