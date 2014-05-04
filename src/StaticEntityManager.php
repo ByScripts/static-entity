@@ -15,7 +15,7 @@ namespace Byscripts\StaticEntity;
  *
  * @author Thierry Goettelmann <thierry@byscripts.info>
  */
-class StaticEntityBuilder
+class StaticEntityManager
 {
     private $class;
 

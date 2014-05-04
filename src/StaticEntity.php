@@ -18,9 +18,9 @@ namespace Byscripts\StaticEntity;
 abstract class StaticEntity implements StaticEntityInterface
 {
     /**
-     * @var  StaticEntityBuilder
+     * @var  StaticEntityManager
      */
-    private static $builders;
+    private static $managers;
 
     /**
      * @var mixed
@@ -36,7 +36,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function get($identifier)
     {
-        return self::getBuilder()->get($identifier);
+        return self::getManager()->get($identifier);
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function hasId($id)
     {
-        return self::getBuilder()->hasId($id);
+        return self::getManager()->hasId($id);
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getAll()
     {
-        return self::getBuilder()->getAll();
+        return self::getManager()->getAll();
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getAssociative($valueKey = 'name')
     {
-        return self::getBuilder()->getAssociative($valueKey);
+        return self::getManager()->getAssociative($valueKey);
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function getIds()
     {
-        return self::getBuilder()->getIds();
+        return self::getManager()->getIds();
     }
 
     /**
@@ -103,17 +103,17 @@ abstract class StaticEntity implements StaticEntityInterface
      */
     static public function toId($idOrEntity)
     {
-        return self::getBuilder()->convertToId($idOrEntity);
+        return self::getManager()->convertToId($idOrEntity);
     }
 
 
     /**
-     * Get the StaticEntity builder
+     * Get the StaticEntity manager for the current class
      *
      * @throws \Exception
-     * @return StaticEntityBuilder
+     * @return StaticEntityManager
      */
-    private static function getBuilder()
+    private static function getManager()
     {
         $class = get_called_class();
 
@@ -121,11 +121,11 @@ abstract class StaticEntity implements StaticEntityInterface
             throw new \Exception('You cannot call methods directly on StaticEntity class');
         }
 
-        if (!isset(self::$builders[$class])) {
-            self::$builders[$class] = new StaticEntityBuilder($class);
+        if (!isset(self::$managers[$class])) {
+            self::$managers[$class] = new StaticEntityManager($class);
         }
 
-        return self::$builders[$class];
+        return self::$managers[$class];
     }
 
     /**

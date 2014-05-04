@@ -3,7 +3,7 @@
 namespace Byscripts\StaticEntity\Tests;
 
 use Byscripts\StaticEntity\StaticEntity;
-use Byscripts\StaticEntity\StaticEntityBuilder;
+use Byscripts\StaticEntity\StaticEntityManager;
 use Byscripts\StaticEntity\Tests\Fixtures\Civility;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidData;
 use Byscripts\StaticEntity\Tests\Fixtures\InvalidDataSet;
@@ -18,7 +18,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         /** @var $civility Civility */
         $civility = $builder->get('mr');
@@ -31,7 +31,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testNotFound()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
         $civility = $builder->get('not-exists');
 
         $this->assertNull($civility);
@@ -39,7 +39,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSameInstances()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         $civility1 = $builder->get('mr');
         $civility2 = $builder->get('mr');
@@ -53,7 +53,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidDataSet()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\InvalidDataSet');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\InvalidDataSet');
         $builder->get('foo');
     }
 
@@ -63,7 +63,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidData()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\InvalidData');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\InvalidData');
         $builder->get('foo');
     }
 
@@ -73,13 +73,13 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testMissingProperty()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\MissingProperty');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\MissingProperty');
         $builder->get('foo');
     }
 
     public function testExists()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         $this->assertTrue(
             $builder->hasId('mr')
@@ -92,7 +92,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testToId()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         $civility = $builder->get('mr');
 
@@ -107,13 +107,13 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadToId()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
         $builder->convertToId('non-existent-id');
     }
 
     public function testGetAll()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         /** @var $all Civility[] */
         $all = $builder->getAll();
@@ -130,7 +130,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllTwice()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         $all1 = $builder->getAll();
         $all2 = $builder->getAll();
@@ -140,7 +140,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssoc()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
         $assoc = $builder->getAssociative('name');
 
         $this->assertArrayHasKey('mr', $assoc);
@@ -160,7 +160,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testIs()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
 
         /** @var $civility Civility */
         $civility = $builder->get('mr');
@@ -171,7 +171,7 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIds()
     {
-        $builder = new StaticEntityBuilder('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
         $ids = $builder->getIds();
 
         $this->assertEquals(array('mr', 'mrs'), $ids);
