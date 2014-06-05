@@ -85,7 +85,11 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mr', Civility::toId($civility));
         $this->assertEquals('mr', Civility::toId('mr'));
+    }
 
+    public function testEmptyToId()
+    {
+        $this->assertNull(Civility::toId(""));
     }
 
     /**

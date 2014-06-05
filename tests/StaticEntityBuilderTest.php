@@ -98,7 +98,12 @@ class StaticEntityBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mr', $builder->convertToId($civility));
         $this->assertEquals('mr', $builder->convertToId('mr'));
+    }
 
+    public function testEmptyToId()
+    {
+        $builder = new StaticEntityManager('\Byscripts\StaticEntity\Tests\Fixtures\Civility');
+        $this->assertNull($builder->convertToId(""));
     }
 
     /**

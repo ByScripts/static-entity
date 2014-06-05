@@ -2,7 +2,6 @@
     "name": "byscripts/static-entity",
     "type": "library",
     "description": "Provide some kind of static entities",
-    "minimum-stability": "dev",
     "license": "MIT",
     "authors": [
         {

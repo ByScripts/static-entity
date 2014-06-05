@@ -131,7 +131,9 @@ class StaticEntityManager
      */
     public function convertToId($staticEntity)
     {
-        if ($staticEntity instanceof StaticEntity) {
+        if (empty($staticEntity)) {
+            return null;
+        } elseif ($staticEntity instanceof StaticEntity) {
             return $staticEntity->getId();
         } elseif (!$this->hasId($staticEntity)) {
             throw new \Exception(
