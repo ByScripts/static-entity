@@ -30,13 +30,14 @@ abstract class StaticEntity implements StaticEntityInterface
     /**
      * Get a static entity instance
      *
-     * @param mixed $identifier
+     * @param mixed   $id
+     * @param boolean $forceInstance Whether returns an empty instance when no result
      *
      * @return mixed
      */
-    static public function get($identifier)
+    static public function get($id, $forceInstance = false)
     {
-        return self::getManager()->get($identifier);
+        return self::getManager()->get($id, $forceInstance);
     }
 
     /**

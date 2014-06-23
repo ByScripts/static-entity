@@ -33,6 +33,14 @@ class StaticEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($civility);
     }
 
+    public function testNotFoundForceInstance()
+    {
+        $civility = Civility::get('not-exists', true);
+
+        $this->assertInstanceOf('\Byscripts\StaticEntity\Tests\Fixtures\Civility', $civility);
+        $this->assertNull($civility->getId());
+    }
+
     public function testSameInstances()
     {
         $civility1 = Civility::get('mr');

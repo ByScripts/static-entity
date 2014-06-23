@@ -50,16 +50,18 @@ class StaticEntityManager
     }
 
     /**
-     * @param mixed $id
+     * @param mixed   $id
+     * @param boolean $forceInstance Whether returns an empty instance when no result
      *
      * @return StaticEntity|null
      */
-    public function get($id)
+    public function get($id, $forceInstance = false)
     {
         if (array_key_exists($id, $this->instances)) {
-            return $this->instances[$id];
+            return null === $this->instances[$id] ? $this->reflection->newInstance() : $this->instances[$id];
         } elseif (!$data = $this->getData($id)) {
-            return $this->instances[$id] = null;
+            $this->instances[$id] = null;
+            return $forceInstance ? $this->reflection->newInstance() : null;
         }
 
         $this->instances[$id] = $this->reflection->newInstance();
