@@ -133,7 +133,7 @@ class StaticEntityManager
      */
     public function convertToId($staticEntity)
     {
-        if (empty($staticEntity)) {
+        if (empty($staticEntity) && '0' !== $staticEntity && 0 !== $staticEntity) {
             return null;
         } elseif ($staticEntity instanceof StaticEntity) {
             return $staticEntity->getId();
