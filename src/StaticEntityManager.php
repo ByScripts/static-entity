@@ -156,7 +156,7 @@ class StaticEntityManager
         $dataSet = call_user_func(array($this->class, 'getDataSet'));
 
         if (!is_array($dataSet) || count($dataSet) !== count(array_filter($dataSet, 'is_array'))) {
-            throw new \Exception('DataSet for class %s seems invalid');
+            throw new \Exception(sprintf('DataSet for class %s seems invalid', $this->class));
         }
 
         $this->ids = array_keys($dataSet);
