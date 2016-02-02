@@ -58,9 +58,8 @@ class StaticEntityManager
     public function get($id, $forceInstance = false)
     {
         if (array_key_exists($id, $this->instances)) {
-            return null === $this->instances[$id] ? $this->reflection->newInstance() : $this->instances[$id];
+            return $this->instances[$id];
         } elseif (!$data = $this->getData($id)) {
-            $this->instances[$id] = null;
             return $forceInstance ? $this->reflection->newInstance() : null;
         }
 
