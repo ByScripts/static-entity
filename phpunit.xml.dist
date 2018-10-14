@@ -11,8 +11,13 @@
         stopOnSkipped="false"
         verbose="false">
     <testsuites>
-        <testsuite name="Static Entity Test Suite$">
+        <testsuite name="Static Entity Test Suite">
             <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix="Test.php">tests</directory>
+        </whitelist>
+    </filter>
 </phpunit>
