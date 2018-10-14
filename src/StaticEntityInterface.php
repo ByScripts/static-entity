@@ -5,8 +5,8 @@ namespace Byscripts\StaticEntity;
 
 interface StaticEntityInterface
 {
-    public function getId();
-
     static function getDataSet(): array;
+
+    public function getId();
 }
 

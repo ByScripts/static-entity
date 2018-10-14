@@ -7,16 +7,6 @@ abstract class AbstractStaticEntity implements StaticEntityInterface
 {
     protected $id;
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $id
-     *
-     * @return $this
-     */
     static public function get($id): StaticEntityInterface
     {
         return Provider::get(get_called_class(), $id);
@@ -45,5 +35,10 @@ abstract class AbstractStaticEntity implements StaticEntityInterface
     static public function getIds(): array
     {
         return Provider::getIds(get_called_class());
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }

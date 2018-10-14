@@ -12,7 +12,6 @@ class Provider implements ProviderInterface
      * @param mixed  $id
      *
      * @return StaticEntityInterface
-     * @throws \ReflectionException
      */
     static public function get(string $className, $id): StaticEntityInterface
     {
@@ -39,7 +38,6 @@ class Provider implements ProviderInterface
      * @param string $className
      *
      * @return array
-     * @throws \ReflectionException
      */
     static public function getAll(string $className): array
     {
@@ -162,8 +160,6 @@ class Provider implements ProviderInterface
      * @param string $className
      * @param mixed  $id
      * @param array  $data
-     *
-     * @throws \ReflectionException
      */
     static private function build(string $className, $id, array $data): void
     {
@@ -182,12 +178,14 @@ class Provider implements ProviderInterface
     /**
      * @param StaticEntityInterface $instance
      * @param array                 $data
-     *
-     * @throws \ReflectionException
      */
     static private function hydrate(StaticEntityInterface $instance, array $data): void
     {
-        $reflectionClass = new \ReflectionClass($instance);
+        try {
+            $reflectionClass = new \ReflectionClass($instance);
+        } catch (\Throwable $e) {
+            return;
+        }
 
         foreach ($data as $key => $value) {
             if (!$reflectionClass->hasProperty($key)) {
