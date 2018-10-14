@@ -2,12 +2,12 @@
 
 Provides an easy way to get some entity/model behavior with static data
 
-[![Build Status](https://travis-ci.org/ByScripts/static-entity.svg?branch=v3.0)](https://travis-ci.org/ByScripts/static-entity)
+[![Build Status](https://travis-ci.org/ByScripts/static-entity.svg?branch=master)](https://travis-ci.org/ByScripts/static-entity)
 [![Latest Stable Version](https://poser.pugx.org/byscripts/static-entity/v/stable.png)](https://packagist.org/packages/byscripts/static-entity) 
 [![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/quality-score.png?b=v3.0)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=v3.0)
-[![Code Coverage](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/coverage.png?b=v3.0)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=v3.0)
-[![Codeship Status for ByScripts/static-entity](https://app.codeship.com/projects/7eec66b0-b204-0136-a2d1-0a3b713c59e9/status?branch=v3.0)](https://app.codeship.com/projects/310628)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=master)
+[![Codeship Status for ByScripts/static-entity](https://app.codeship.com/projects/7eec66b0-b204-0136-a2d1-0a3b713c59e9/status?branch=master)](https://app.codeship.com/projects/310628)
 
 ## Installation
 
