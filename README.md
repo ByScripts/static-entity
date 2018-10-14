@@ -7,7 +7,7 @@ Provides an easy way to get some entity/model behavior with static data
 [![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/quality-score.png?b=v3.0)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=v3.0)
 [![Code Coverage](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/coverage.png?b=v3.0)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=v3.0)
-[![Codeship Status for ByScripts/ByscriptsStaticEntity](https://codeship.com/projects/9ec69660-346a-0133-a68d-56c8db4126b8/status?branch=v3.0)](https://codeship.com/projects/100498)
+[![Codeship Status for ByScripts/static-entity](https://app.codeship.com/projects/7eec66b0-b204-0136-a2d1-0a3b713c59e9/status?branch=v3.0)](https://app.codeship.com/projects/310628)
 
 ## Installation
 
