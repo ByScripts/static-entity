@@ -175,17 +175,9 @@ class Provider implements ProviderInterface
         self::$instances[$className][$id] = $instance;
     }
 
-    /**
-     * @param StaticEntityInterface $instance
-     * @param array                 $data
-     */
     static private function hydrate(StaticEntityInterface $instance, array $data): void
     {
-        try {
-            $reflectionClass = new \ReflectionClass($instance);
-        } catch (\Throwable $e) {
-            return;
-        }
+        $reflectionClass = new \ReflectionClass($instance);
 
         foreach ($data as $key => $value) {
             if (!$reflectionClass->hasProperty($key)) {
