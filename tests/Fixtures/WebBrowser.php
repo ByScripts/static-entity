@@ -13,39 +13,39 @@ namespace Byscripts\StaticEntity\Tests\Fixtures;
 use Byscripts\StaticEntity\AbstractStaticEntity;
 
 /**
- * Class Civility
+ * Class WebBrowser
  *
  * @author Thierry Goettelmann <thierry@byscripts.info>
  */
-class Civility extends AbstractStaticEntity
+class WebBrowser extends AbstractStaticEntity
 {
-    const MR = 1;
-    const MRS = 2;
+    const FIREFOX = 'mf';
+    const CHROME = 'gc';
 
-    private $gender;
-    private $shortName;
+    private $name;
+    private $vendor;
 
     static function getDataSet(): array
     {
         return [
-            self::MR => [
-                'gender' => 'Male',
-                'shortName' => 'Mr.',
+            self::FIREFOX => [
+                'name' => 'Firefox',
+                'vendor' => 'Mozilla',
             ],
-            self::MRS => [
-                'gender' => 'Female',
-                'shortName' => 'Mrs',
+            self::CHROME => [
+                'name' => 'Chrome',
+                'vendor' => 'Google',
             ],
         ];
     }
 
-    public function getGender(): string
+    public function getName(): string
     {
-        return $this->gender;
+        return $this->name;
     }
 
-    public function getShortName(): string
+    public function getVendor(): string
     {
-        return $this->shortName;
+        return $this->vendor;
     }
 }

@@ -10,16 +10,17 @@ Provides an easy way to get some entity/model behavior with static data
 
 ### Add the package in your composer.json
 
-At command line, run `composer require byscripts/static-entity:~2.0`
+At command line, run `composer require byscripts/static-entity:~3.0`
 
 ### Usage
 
 #### Create your static entity
 
 ```php
-use Byscripts\StaticEntity\StaticEntity;
+<?php
+use Byscripts\StaticEntity\AbstractStaticEntity;
 
-class WebBrowser extends StaticEntity
+class WebBrowser extends AbstractStaticEntity
 {
     const CHROMIUM = 1;
     const FIREFOX  = 2;
@@ -52,7 +53,7 @@ class WebBrowser extends StaticEntity
         return $this->license;
     }
 
-    static public function getDataSet()
+    static public function getDataSet(): array
     {
         return [
             self::CHROMIUM => [
@@ -93,6 +94,8 @@ class WebBrowser extends StaticEntity
 #### Play with it
 
 ```php
+<?php
+
 // Get an instance of WebBrowser, hydrated with Firefox data
 $firefox = WebBrowser::get(WebBrowser::FIREFOX);
 
@@ -105,10 +108,6 @@ $firefox->getId(); // 2
 
 // Other methods are ones implemented in the static entity
 $firefox->getName(); // Firefox
-
-// The is() method check the argument against the instance ID
-$firefox->is(WebBrowser::CHROMIUM); // false
-$firefox->is(WebBrowser::FIREFOX);  // true
 
 // The toId() method transform an entity to ID.
 // If an id is passed, it is returned as is, after checking it exists.
@@ -135,16 +134,20 @@ WebBrowser::hasId(9); // false
 
 #### Alternative usage
 
-You can also use the StaticEntityBuilder class
+You can also use the `Provider` class.
+
+In this case, your entity is not required to extends `AbstractStaticEntity`,
+but still needs to implements `StaticEntityInterface`
 
 ```php
-$builder = new StaticEntityBuilder('WebBrowser');
+<?php
+use Byscripts\StaticEntity\Provider;
 
-$builder->get(WebBrowser::FIREFOX);
-$builder->getAssociative();
-$builder->getAssociative('other');
-$builder->getIds();
-$builder->getAll();
-$builder->hasId(WebBrowser::CHROMIUM);
-$builder->convertToId($instance);
+Provider::get(WebBrowser::class, WebBrowser::FIREFOX);
+Provider::getAssociative(WebBrowser::class);
+Provider::getAssociative(WebBrowser::class, 'otherKey');
+Provider::getIds(WebBrowser::class);
+Provider::getAll(WebBrowser::class);
+Provider::hasId(WebBrowser::class, WebBrowser::CHROMIUM);
+Provider::toId(WebBrowser::class, $instanceOrId);
 ```
