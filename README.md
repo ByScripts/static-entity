@@ -2,9 +2,12 @@
 
 Provides an easy way to get some entity/model behavior with static data
 
-[![Build Status](https://travis-ci.org/ByScripts/static-entity.svg?branch=master)](https://travis-ci.org/ByScripts/static-entity) [![Latest Stable Version](https://poser.pugx.org/byscripts/static-entity/v/stable.png)](https://packagist.org/packages/byscripts/static-entity) [![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/badges/quality-score.png?s=7f14b935e4a281cbaea56eeacdb5dbe8bf37bc75)](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/) [![Code Coverage](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/badges/coverage.png?s=d6250c0ecf468198873e667d009fe35aa80f9558)](https://scrutinizer-ci.com/g/ByScripts/ByscriptsStaticEntity/)
-
-[![Codeship Status for ByScripts/ByscriptsStaticEntity](https://codeship.com/projects/9ec69660-346a-0133-a68d-56c8db4126b8/status?branch=master)](https://codeship.com/projects/100498)
+[![Build Status](https://travis-ci.org/ByScripts/static-entity.svg?branch=v3.0)](https://travis-ci.org/ByScripts/static-entity)
+[![Latest Stable Version](https://poser.pugx.org/byscripts/static-entity/v/stable.png)](https://packagist.org/packages/byscripts/static-entity) 
+[![License](https://poser.pugx.org/byscripts/static-entity/license.png)](https://packagist.org/packages/byscripts/static-entity)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/quality-score.png?b=v3.0)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=v3.0)
+[![Code Coverage](https://scrutinizer-ci.com/g/ByScripts/static-entity/badges/coverage.png?b=v3.0)](https://scrutinizer-ci.com/g/ByScripts/static-entity/?branch=v3.0)
+[![Codeship Status for ByScripts/ByscriptsStaticEntity](https://codeship.com/projects/9ec69660-346a-0133-a68d-56c8db4126b8/status?branch=v3.0)](https://codeship.com/projects/100498)
 
 ## Installation
 
