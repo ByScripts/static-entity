@@ -3,6 +3,8 @@
 namespace Byscripts\StaticEntity\Tests;
 
 use Byscripts\StaticEntity\Provider;
+use Byscripts\StaticEntity\Tests\Fixtures\BadClass;
+use Byscripts\StaticEntity\Tests\Fixtures\BadProperty;
 use Byscripts\StaticEntity\Tests\Fixtures\Civility;
 use Byscripts\StaticEntity\Tests\Fixtures\WebBrowser;
 use PHPUnit\Framework\TestCase;
@@ -134,5 +136,23 @@ class ProviderTest extends TestCase
         $ids = Provider::getIds(Civility::class);
 
         $this->assertEquals([Civility::MR, Civility::MRS], $ids);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage has no property
+     */
+    public function testBadProperty()
+    {
+        Provider::getAll(BadProperty::class);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage must implements
+     */
+    public function testBadClass()
+    {
+        Provider::getAll(BadClass::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Byscripts\StaticEntity\Tests;
 
+use Byscripts\StaticEntity\Tests\Fixtures\BadProperty;
 use Byscripts\StaticEntity\Tests\Fixtures\Civility;
 use Byscripts\StaticEntity\Tests\Fixtures\WebBrowser;
 use PHPUnit\Framework\TestCase;
@@ -130,5 +131,14 @@ class EntityTest extends TestCase
         $ids = Civility::getIds();
 
         $this->assertEquals([Civility::MR, Civility::MRS], $ids);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage has no property
+     */
+    public function testBadProperty()
+    {
+        BadProperty::getAll();
     }
 }
