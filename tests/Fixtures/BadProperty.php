@@ -6,7 +6,7 @@ use Byscripts\StaticEntity\AbstractStaticEntity;
 
 class BadProperty extends AbstractStaticEntity
 {
-    static function getDataSet(): array
+    static public function getDataSet(): array
     {
         return [
             1 => [

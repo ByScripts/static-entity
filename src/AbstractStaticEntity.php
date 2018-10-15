@@ -7,6 +7,11 @@ abstract class AbstractStaticEntity implements StaticEntityInterface
 {
     protected $id;
 
+    /**
+     * @param $id
+     *
+     * @return $this
+     */
     static public function get($id): StaticEntityInterface
     {
         return Provider::get(get_called_class(), $id);
